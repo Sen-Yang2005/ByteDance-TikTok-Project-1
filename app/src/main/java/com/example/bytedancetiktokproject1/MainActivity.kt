@@ -1,47 +1,64 @@
 package com.example.bytedancetiktokproject1
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.bytedancetiktokproject1.ui.theme.ByteDanceTikTokProject1Theme
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+
+    private val data = mutableListOf<Experience>()
+    private lateinit var adapter: ExperienceAdapter
+
+    fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ByteDanceTikTokProject1Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+        setContentView(R.layout.activity_main)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        swipeRefresh = findViewById(R.id.swipeRefresh)
+
+        // 设置瀑布流 LayoutManager
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+
+        adapter = ExperienceAdapter(data)
+        recyclerView.adapter = adapter
+
+        // 初始数据
+        loadMockData()
+
+        // 下拉刷新
+        swipeRefresh.setOnRefreshListener {
+            data.clear()
+            loadMockData()
+            adapter.notifyDataSetChanged()
+            swipeRefresh.isRefreshing = false
+        }
+
+        // 上拉加载更多
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(rv: RecyclerView, newState: Int) {
+                if (!rv.canScrollVertically(1)) {
+                    loadMockData()
+                    adapter.notifyDataSetChanged()
                 }
             }
-        }
+        })
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ByteDanceTikTokProject1Theme {
-        Greeting("Android")
+    private fun loadMockData() {
+        repeat(20) {
+            data.add(
+                Experience(
+                    "https://picsum.photos/300/300?random=${Math.random()}",
+                    "经验标题 $it"
+                )
+            )
+        }
     }
 }
