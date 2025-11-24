@@ -1,65 +1,68 @@
 package com.example.bytedancetiktokproject1
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
+class MainActivity : AppCompatActivity() {
 
-class MainActivity : AppCompatActivity (){
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var recycler: RecyclerView
+    private lateinit var swipe: SwipeRefreshLayout
+    private lateinit var switchBtn: Button
 
+    private var isTwoColumn = true
     private val data = mutableListOf<Experience>()
     private lateinit var adapter: ExperienceAdapter
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.rvExperience)
-        swipeRefresh = findViewById(R.id.refreshLayout)
+        recycler = findViewById(R.id.recyclerView)
+        swipe = findViewById(R.id.swipeRefresh)
+        switchBtn = findViewById(R.id.btnSwitch)
 
-        // 设置瀑布流 LayoutManager
-        recyclerView.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        // 默认双列瀑布流
+        updateLayoutManager()
 
         adapter = ExperienceAdapter(data)
-        recyclerView.adapter = adapter
+        recycler.adapter = adapter
 
-        // 初始数据
-        loadMockData()
+        loadMoreData()
 
-        // 下拉刷新
-        swipeRefresh.setOnRefreshListener {
+        swipe.setOnRefreshListener {
             data.clear()
-            loadMockData()
-            adapter.notifyDataSetChanged()
-            swipeRefresh.isRefreshing = false
+            loadMoreData()
+            swipe.isRefreshing = false
         }
 
-        // 上拉加载更多
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(rv: RecyclerView, newState: Int) {
                 if (!rv.canScrollVertically(1)) {
-                    loadMockData()
-                    adapter.notifyDataSetChanged()
+                    loadMoreData()
                 }
             }
         })
+
+        // 单列/双列切换
+        switchBtn.setOnClickListener {
+            isTwoColumn = !isTwoColumn
+            updateLayoutManager()
+        }
     }
 
-    private fun loadMockData() {
-        repeat(20) {
-            data.add(
-                Experience(
-                    "https://picsum.photos/300/300?random=${Math.random()}",
-                    "经验标题 $it"
-                )
-            )
-        }
+    private fun loadMoreData() {
+        data.addAll(MockData.mockData(20))
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun updateLayoutManager() {
+        recycler.layoutManager = StaggeredGridLayoutManager(
+            if (isTwoColumn) 2 else 1,
+            StaggeredGridLayoutManager.VERTICAL
+        )
     }
 }
