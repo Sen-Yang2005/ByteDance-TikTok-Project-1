@@ -1,5 +1,6 @@
 package com.example.bytedancetiktokproject1
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -7,20 +8,20 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity (){
     private lateinit var recyclerView: RecyclerView
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
     private val data = mutableListOf<Experience>()
     private lateinit var adapter: ExperienceAdapter
 
-    fun onCreate(savedInstanceState: Bundle?) {
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.recyclerView)
-        swipeRefresh = findViewById(R.id.swipeRefresh)
+        recyclerView = findViewById(R.id.rvExperience)
+        swipeRefresh = findViewById(R.id.refreshLayout)
 
         // 设置瀑布流 LayoutManager
         recyclerView.layoutManager =

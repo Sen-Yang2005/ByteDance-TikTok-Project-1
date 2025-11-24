@@ -13,8 +13,8 @@ class ExperienceAdapter(
 ) : RecyclerView.Adapter<ExperienceAdapter.VH>() {
 
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image: ImageView = itemView.findViewById(R.id.image)
-        val title: TextView = itemView.findViewById(R.id.title)
+        val image: ImageView = itemView.findViewById(R.id.imgCover)
+        val title: TextView = itemView.findViewById(R.id.txtTitle)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
