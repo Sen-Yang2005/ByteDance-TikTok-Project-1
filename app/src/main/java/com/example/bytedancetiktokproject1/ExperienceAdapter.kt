@@ -23,7 +23,7 @@ class ExperienceAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val v = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_experience, parent, false)
+            .inflate(R.layout.activity_main, parent, false)
         return VH(v)
     }
 
@@ -37,7 +37,7 @@ class ExperienceAdapter(
         Glide.with(holder.image)
             .load(item.imageUrl)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(false)
+            .skipMemoryCache(false) // 内存缓存
             .into(holder.image)
 
         Glide.with(holder.avatar)

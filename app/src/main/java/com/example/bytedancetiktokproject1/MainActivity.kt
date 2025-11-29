@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.item_experience_single_column)
 
         recycler = findViewById(R.id.recyclerView)
         swipe = findViewById(R.id.swipeRefresh)
