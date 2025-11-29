@@ -56,7 +56,10 @@
 ## 技术栈
 
   Kotlin
+  
   RecyclerView StaggeredGridLayoutManager
+  
   Glide 图片加载与缓存
+  
   SwipeRefreshLayout 下拉刷新
 
