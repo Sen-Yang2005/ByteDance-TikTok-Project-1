@@ -12,7 +12,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var swipe: SwipeRefreshLayout
     private lateinit var switchBtn: Button
-
     private var isTwoColumn = true
     private val data = mutableListOf<Experience>()
     private lateinit var adapter: ExperienceAdapter
@@ -25,11 +24,13 @@ class MainActivity : AppCompatActivity() {
         swipe = findViewById(R.id.swipeRefresh)
         switchBtn = findViewById(R.id.btnSwitch)
 
-        // 默认双列瀑布流
+        //默认双列布局
         updateLayoutManager()
 
         adapter = ExperienceAdapter(data)
         recycler.adapter = adapter
+        recycler.setHasFixedSize(true) // 固定大致高度
+        recycler.setItemViewCacheSize(10) // 提前缓存10个经验卡
 
         loadMoreData()
 
@@ -47,19 +48,19 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // 单列/双列切换
+        //单列/双列切换
         switchBtn.setOnClickListener {
             isTwoColumn = !isTwoColumn
             updateLayoutManager()
         }
     }
 
-    private fun loadMoreData() {
+    fun loadMoreData() {
         data.addAll(MockData.mockData(20))
         adapter.notifyDataSetChanged()
     }
 
-    private fun updateLayoutManager() {
+    fun updateLayoutManager() {
         recycler.layoutManager = StaggeredGridLayoutManager(
             if (isTwoColumn) 2 else 1,
             StaggeredGridLayoutManager.VERTICAL
