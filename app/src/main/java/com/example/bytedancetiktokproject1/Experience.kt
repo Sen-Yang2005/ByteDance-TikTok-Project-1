@@ -6,7 +6,7 @@ import java.net.URL
 class Experience(
     val imageUrl: String,
     val title: String,
-    val avatarUrl: String,
+    val avatarID: Int,
     val username: String,
     var liked: Boolean = false,
     var likeCount: Int = 0

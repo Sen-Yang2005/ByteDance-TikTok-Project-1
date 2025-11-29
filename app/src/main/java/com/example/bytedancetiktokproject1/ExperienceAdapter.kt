@@ -29,28 +29,30 @@ class ExperienceAdapter(
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = list[position]
 
-        // 动态高度模拟瀑布流效果
+        //动态高度模拟瀑布流效果
         val randomHeight = (500..900).random()
         holder.image.layoutParams.height = randomHeight
 
         Glide.with(holder.image).load(item.imageUrl).into(holder.image)
-        Glide.with(holder.avatar).load(item.avatarUrl).circleCrop().into(holder.avatar)
+        Glide.with(holder.avatar).load(item.avatarID).circleCrop().into(holder.avatar)
         holder.title.text = item.title
         holder.username.text = item.username
         holder.likeCount.text = item.likeCount.toString()
 
-        // 点赞按钮
+        //点赞按钮
         holder.btnLike.setImageResource(
-            if (item.liked) R.drawable.icon_like_on else R.drawable.icon_like_off
+            if (item.liked) R.drawable.icon_like_on
+            else R.drawable.icon_like_off
         )
 
         holder.btnLike.setOnClickListener {
             item.liked = !item.liked
-            if (item.liked) item.likeCount++ else item.likeCount--
+            if (item.liked) item.likeCount++
+            else item.likeCount--
             notifyItemChanged(position)
         }
 
-        // 图片预加载
+        //图片预加载
         Glide.with(holder.image.context)
             .load(item.imageUrl)
             .preload()
