@@ -20,10 +20,11 @@ object MockData {
 
         repeat(count) {
             val randomAvatarId = avatarList.random()
+            val randomImageUrl = "https://picsum.photos/200/300?random=${(1..1000).random()}"
 
             list.add(
                 Experience(
-                    imageUrl = "https://picsum.photos/300/300?random=${Math.random()}",
+                    imageUrl = randomImageUrl,
                     title = "经验标题 $it",
                     avatarID = randomAvatarId,
                     username = "用户 $it",
